@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:study_package/main.dart';
+import 'package:timezone/timezone.dart' as tz;
+
+import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -65,11 +67,33 @@ class _HomePageState extends State<HomePage> {
                 return;
               }
 
-              await flutterLocalNotificationsPlugin.show(
-                0,
-                'plain title',
-                'plain body',
+              // await flutterLocalNotificationsPlugin.show(
+              //   0,
+              //   'plain title',
+              //   'plain body',
+              //   detail,
+              // );
+
+              // 타임존 셋팅 필요
+              final now = tz.TZDateTime.now(tz.local);
+
+              await notification.zonedSchedule(
+                1,
+                'alarmTitle',
+                'alarmDescription',
+                tz.TZDateTime(
+                  tz.local,
+                  now.year,
+                  now.month,
+                  now.day,
+                  now.hour,
+                  now.minute + 1,
+                ),
                 detail,
+                androidAllowWhileIdle: true,
+                uiLocalNotificationDateInterpretation:
+                    UILocalNotificationDateInterpretation.absoluteTime,
+                matchDateTimeComponents: DateTimeComponents.time,
               );
             },
             child: const Text('add alarm'),
