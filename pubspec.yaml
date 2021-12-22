@@ -38,6 +38,9 @@ dependencies:
   # toast
   fluttertoast: ^8.0.8
 
+  # alarm
+  flutter_local_notifications: ^9.1.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
