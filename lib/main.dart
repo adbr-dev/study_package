@@ -33,11 +33,9 @@ void _initNotiSetting() async {
     iOS: initializationSettingsIOS,
   );
 
-  final result = await flutterLocalNotificationsPlugin.initialize(
+  await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
   );
-
-  print(result);
 }
 
 class MyApp extends StatelessWidget {
