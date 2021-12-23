@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:study_package/model/inputform.dart';
 
 class UserListPage extends StatefulWidget {
@@ -13,6 +15,13 @@ class _UserListPageState extends State<UserListPage> {
   TextEditingController ageController = TextEditingController();
 
   final users = <InputForm>[];
+  late Box _darkMode;
+
+  @override
+  void initState() {
+    super.initState();
+    _darkMode = Hive.box('darkModeBox');
+  }
 
   @override
   void dispose() {
@@ -23,8 +32,23 @@ class _UserListPageState extends State<UserListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode =
+        Hive.box('darkModeBox').get('darkMode', defaultValue: false);
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          CupertinoSwitch(
+            value: darkMode,
+            onChanged: (val) {
+              setState(() {
+                _darkMode.put('darkMode', val);
+              });
+            },
+          ),
+          const SizedBox(width: 10),
+        ],
+      ),
       body: Column(
         children: [
           Column(

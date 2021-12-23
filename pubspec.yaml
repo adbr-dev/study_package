@@ -46,6 +46,10 @@ dependencies:
   # gallery, camera
   image_picker: ^0.8.4+4
 
+  # hive
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

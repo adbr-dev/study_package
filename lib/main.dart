@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import 'page/user_list_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await _initHive();
+
   _initNotiSetting();
 
   runApp(const MyApp());
+}
+
+Future<void> _initHive() async {
+  await Hive.initFlutter();
+  await Hive.openBox('darkModeBox');
 }
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -44,12 +53,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const UserListPage(),
-    );
+    return ValueListenableBuilder(
+        valueListenable: Hive.box('darkModeBox').listenable(),
+        builder: (context, Box box, widget) {
+          final darkMode = box.get('darkMode', defaultValue: false);
+
+          return MaterialApp(
+            title: 'Flutter Demo',
+            themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
+            darkTheme: ThemeData.dark(),
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            home: const UserListPage(),
+          );
+        });
   }
 }
