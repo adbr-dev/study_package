@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:study_package/model/inputform.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -19,7 +20,11 @@ void main() async {
 
 Future<void> _initHive() async {
   await Hive.initFlutter();
+
+  Hive.registerAdapter(InputFormAdapter());
+
   await Hive.openBox('darkModeBox');
+  await Hive.openBox<InputForm>('inputFormBox');
 }
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
